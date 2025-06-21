@@ -14,6 +14,10 @@ exports.getTasks = (req, res) => {
     taskList = taskList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
+  if(taskList && taskList.length === 0) {
+    return res.status(404).json({ error: "No tasks found" });
+  }
+
   res.json(taskList);
 };
 
@@ -25,8 +29,11 @@ exports.getTask = (req, res) => {
 
 exports.createTask = (req, res) => {
   const { title, description, completed = false } = req.body;
-  if (!title || !description)
+  if (!title)
     return res.status(400).json({ error: "Title is required" });
+  else if (!description)
+    return res.status(400).json({ error: "Description is required" });
+  
   const task = Task.create({ title, description, completed });
   res.status(201).json(task);
 };
@@ -40,13 +47,21 @@ exports.updateTask = (req, res) => {
     description,
     completed,
   });
-  if (!task || !this.deleteTask || typeof completed != "boolean")
+  if (!task || !this.deleteTask )
     return res.status(400).json({ error: "Task not found" });
+  else if (!title)
+    return res.status(400).json({ error: "Title is required" });
+  else if (!description)
+    return res.status(400).json({ error: "Description is required" });
+  else if (completed === undefined || typeof completed != "boolean")
+    return res.status(400).json({ error: "Completed status is required" });
+  
+
   res.json(task);
 };
 
 exports.deleteTask = (req, res) => {
   const deleted = Task.remove(Number(req.params.id));
   if (!deleted) return res.status(404).json({ error: "Task not found" });
-  res.status(200).send();
+  res.status(200).json({deleted : false} );
 };

@@ -7,7 +7,7 @@ const filePath = path.join(__dirname, '../task.json');
 
 const loadTasks = () => {
   if (fs.existsSync(filePath)) {
-    const rawData = fs.readFileSync(filePath);
+    const rawData = fs.readFileSync(filePath, 'utf8');
     let tasksData = JSON.parse(rawData);
     tasks = tasksData.tasks || [];
     
@@ -21,6 +21,19 @@ const getAll = () => tasks;
 const getById = (id) => tasks.find(task => task.id === id);
 
 const create = (data) => {
+  if(!data)
+    throw new Error('Data is required to create a task');
+  if (!data.title)
+    throw new Error('Title is required to create a task');
+  if (!data.description)
+    throw new Error('Description is required to create a task');
+  if (typeof data.completed !== 'boolean')
+    throw new Error('Completed status must be a boolean');
+  if (data.priority && !['low', 'medium', 'high'].includes(data.priority))
+    throw new Error('Priority must be one of: low, medium, high');
+  if (data.description && typeof data.description !== 'string')
+    throw new Error('Description must be a string');
+
   const task = {
     id: nextId++,
     title: data.title,
@@ -36,6 +49,20 @@ const create = (data) => {
 const update = (id, newData) => {
   const index = tasks.findIndex(task => task.id === id);
   if (index === -1) return null;
+
+  // if(!newData)
+  //   throw new Error('Data is required to create a task');
+  // if (!newData.title)
+  //   throw new Error('Title is required to create a task');
+  // if (!newData.description)
+  //   throw new Error('Description is required to create a task');
+  // if (typeof newData.completed !== 'boolean')
+  //   throw new Error('Completed status must be a boolean');
+  // if (danewDatata.priority && !['low', 'medium', 'high'].includes(newData.priority))
+  //   throw new Error('Priority must be one of: low, medium, high');
+  // if (newData.description && typeof newData.description !== 'string')
+  //   throw new Error('Description must be a string');
+
    tasks[index] = {
     ...tasks[index],
     title: newData.title ?? tasks[index].title,
