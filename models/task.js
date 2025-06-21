@@ -37,9 +37,9 @@ const create = (data) => {
   const task = {
     id: nextId++,
     title: data.title,
-    description: data.description || '',
+    description: data.description,
     completed: data.completed ?? false,
-    priority: data.priority ?? 'medium',
+    priority: data.priority,
     createdAt: new Date().toISOString()
   };
   tasks.push(task);
