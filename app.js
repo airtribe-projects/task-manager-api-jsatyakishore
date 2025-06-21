@@ -1,17 +1,20 @@
 const express = require('express');
+const morgan = require('morgan');
+const taskRoutes = require('./routes/taskRoutes');
+
 const app = express();
-const port = 3000;
-
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-app.listen(port, (err) => {
-    if (err) {
-        return console.log('Something bad happened', err);
-    }
-    console.log(`Server is listening on ${port}`);
+app.use('/tasks', taskRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
 });
 
-
+const PORT = process.env.PORT || 3000;
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
 
 module.exports = app;
