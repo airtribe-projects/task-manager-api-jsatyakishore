@@ -50,18 +50,6 @@ const update = (id, newData) => {
   const index = tasks.findIndex(task => task.id === id);
   if (index === -1) return null;
 
-  // if(!newData)
-  //   throw new Error('Data is required to create a task');
-  // if (!newData.title)
-  //   throw new Error('Title is required to create a task');
-  // if (!newData.description)
-  //   throw new Error('Description is required to create a task');
-  // if (typeof newData.completed !== 'boolean')
-  //   throw new Error('Completed status must be a boolean');
-  // if (danewDatata.priority && !['low', 'medium', 'high'].includes(newData.priority))
-  //   throw new Error('Priority must be one of: low, medium, high');
-  // if (newData.description && typeof newData.description !== 'string')
-  //   throw new Error('Description must be a string');
 
    tasks[index] = {
     ...tasks[index],
